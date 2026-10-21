@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اپ‌ها و بازی‌های من</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef0f7;--card:#fff;--ink:#1c2033;--mute:#69708a;--line:#e1e5f0;--acc:#5b4bdb;--acc2:#8a5cf6;--acc-ink:#fff;--ok:#1a7f4b;--bad:#d03a3a;--shadow:0 2px 10px rgba(40,40,100,.07)}
+@media (prefers-color-scheme:dark){:root{--bg:#0f111a;--card:#191c29;--ink:#e9ebf5;--mute:#9aa1bb;--line:#272b3d;--acc:#7c6cff;--acc2:#a07cff;--acc-ink:#fff;--ok:#4cc58a;--bad:#ff7b7b;--shadow:none}}
+*{box-sizing:border-box}
+html{font-size:15px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.7}
+.hero{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;padding:22px 16px 46px}
+.hero .in{max-width:720px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+h1{margin:0;font-size:1.35rem;font-weight:800}
+.sub{margin:2px 0 0;font-size:.85rem;opacity:.85}
+.wrap{max-width:720px;margin:-26px auto 0;padding:0 16px 50px}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{background:var(--acc);color:var(--acc-ink);border:0;border-radius:8px;padding:5px 14px;cursor:pointer;text-decoration:none;display:inline-block;font-size:.88rem}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.hero .btn.ghost{color:#fff;border-color:rgba(255,255,255,.55)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--bad);padding:2px 10px}
+.btn:disabled{opacity:.5;cursor:wait}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:0 12px;cursor:pointer;font-size:.82rem;box-shadow:var(--shadow)}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.list{display:grid;gap:10px}
+.item{background:var(--card);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow)}
+.ico{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:.72rem;letter-spacing:.3px;background:linear-gradient(135deg,hsl(var(--h) 70% 55%),hsl(calc(var(--h) + 35) 70% 45%))}
+.body{flex:1;min-width:0}
+.item h3{margin:0;font-size:1rem}
+.item p{margin:0;color:var(--mute);font-size:.85rem;white-space:pre-line;overflow-wrap:anywhere}
+.meta{font-size:.75rem;color:var(--mute)}
+.tag{display:inline-block;background:var(--bg);border-radius:6px;padding:0 7px;font-size:.72rem;color:var(--mute);margin-inline-start:6px;font-weight:400}
+.empty{text-align:center;color:var(--mute);padding:34px 0;background:var(--card);border-radius:12px}
+dialog{border:0;border-radius:14px;background:var(--card);color:var(--ink);padding:0;width:min(440px,94vw);max-height:90vh;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(10,10,30,.55)}
+.dlg{padding:16px 18px}
+.dlg h2{margin:0 0 10px;font-size:1.05rem}
+.tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+label{display:block;margin:8px 0 3px;font-size:.82rem;color:var(--mute)}
+input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:.9rem}
+textarea{min-height:64px;resize:vertical}
+.row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.msg{margin-top:8px;font-size:.82rem;min-height:1.2em}
+.msg.ok{color:var(--ok)}.msg.err{color:var(--bad)}
+.note{font-size:.75rem;color:var(--mute);margin-top:5px}
+.adm{display:flex;justify-content:space-between;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:6px 0;font-size:.9rem}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="hero"><div class="in">
+  <div><h1>اپ‌ها و بازی‌های من</h1><p class="sub">ساخته‌های من؛ برای دانلود روی هر کدام بزنید.</p></div>
+  <button class="btn ghost" id="openAdmin">ورود مدیر</button>
+</div></div>
+<div class="wrap">
+  <div class="filters" id="filters"></div>
+  <div class="list" id="list"><div class="empty">در حال بارگذاری…</div></div>
+</div>
+
+<!-- ورود -->
+<dialog id="loginDlg"><div class="dlg">
+  <h2>ورود به پنل مدیریت</h2>
+  <label for="pw">رمز عبور</label>
+  <input type="password" id="pw" autocomplete="current-password">
+  <div class="note">رمز اولیه: <b>admin1234</b> — بعد از ورود حتماً آن را عوض کنید.</div>
+  <div class="msg err" id="loginMsg"></div>
+  <div class="row"><button class="btn" id="loginBtn">ورود</button><button class="btn ghost" data-close="loginDlg">بستن</button></div>
+</div></dialog>
+
+<!-- پنل -->
+<dialog id="adminDlg"><div class="dlg">
+  <h2>پنل مدیریت</h2>
+  <div class="tabs">
+    <button class="chip on" data-tab="up">آپلود</button>
+    <button class="chip" data-tab="manage">مدیریت لیست</button>
+    <button class="chip" data-tab="set">تنظیمات</button>
+  </div>
+
+  <section id="tab-up">
+    <label for="fName">نام</label>
+    <input id="fName" placeholder="مثلاً بازی مار">
+    <label for="fFormat">فرمت</label>
+    <select id="fFormat">
+      <option>APK (اندروید)</option><option>EXE (ویندوز)</option><option>ZIP</option>
+      <option>IPA (iOS)</option><option>DMG (مک)</option><option>PDF</option><option>سایر</option>
+    </select>
+    <label for="fDesc">توضیحات</label>
+    <textarea id="fDesc"></textarea>
+    <label for="fFile">فایل (حداکثر ۵۰ مگابایت)</label>
+    <input type="file" id="fFile">
+    <div class="row"><button class="btn" id="uploadBtn">آپلود و انتشار</button></div>
+  </section>
+
+  <section id="tab-manage" class="hide"><div id="adminList"></div></section>
+
+  <section id="tab-set" class="hide">
+    <b>اتصال به گیت‌هاب</b>
+    <label for="gUser">نام کاربری گیت‌هاب</label><input id="gUser" dir="ltr">
+    <label for="gRepo">نام مخزن (repo)</label><input id="gRepo" dir="ltr">
+    <label for="gBranch">شاخه (branch)</label><input id="gBranch" dir="ltr" value="main">
+    <label for="gToken">توکن گیت‌هاب</label><input id="gToken" type="password" dir="ltr" placeholder="github_pat_...">
+    <div class="note">توکن فقط در همین مرورگر ذخیره می‌شود. در گیت‌هاب: Settings ← Developer settings ← Fine-grained tokens؛ فقط به همین مخزن دسترسی «Contents: Read and write» بدهید.</div>
+    <div class="row"><button class="btn" id="saveGh">ذخیره تنظیمات</button></div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+    <b>تغییر رمز عبور</b>
+    <label for="pOld">رمز فعلی</label><input id="pOld" type="password">
+    <label for="pNew">رمز جدید (حداقل ۶ کاراکتر)</label><input id="pNew" type="password">
+    <div class="row"><button class="btn" id="savePw">تغییر رمز</button></div>
+  </section>
+
+  <div class="msg" id="admMsg"></div>
+  <div class="row"><button class="btn ghost" data-close="adminDlg">بستن</button><button class="btn ghost" id="logout">خروج</button></div>
+</div></dialog>
+
+<script>
+const $ = s => document.querySelector(s);
+const LS = { get:(k,d)=>{try{return localStorage.getItem(k)??d}catch{return d}}, set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}} };
+let apps = [], activeFilter = 'همه';
+
+/* ---------- نمایش عمومی ---------- */
+const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtSize = b => b > 1048576 ? fa((b/1048576).toFixed(1)) + ' مگابایت' : fa(Math.ceil(b/1024)) + ' کیلوبایت';
+const fmtDate = iso => new Date(iso).toLocaleDateString('fa-IR');
+
+async function loadApps(){
+  try{
+    const r = await fetch('apps.json?t=' + Date.now());
+    apps = r.ok ? await r.json() : [];
+  }catch{ apps = []; }
+  render();
+}
+function render(){
+  const formats = ['همه', ...new Set(apps.map(a => a.format))];
+  $('#filters').innerHTML = apps.length ? formats.map(f => `<button class="chip ${f===activeFilter?'on':''}" data-f="${esc(f)}">${esc(f)}</button>`).join('') : '';
+  const shown = apps.filter(a => activeFilter==='همه' || a.format===activeFilter);
+  const hue = t => [...t].reduce((h,c) => (h*31 + c.charCodeAt(0)) % 360, 7);
+  const key = f => f.split(' ')[0].slice(0,4);
+  $('#list').innerHTML = shown.length ? shown.map(a => `
+    <article class="item">
+      <div class="ico" style="--h:${hue(key(a.format))}">${esc(key(a.format))}</div>
+      <div class="body">
+        <h3>${esc(a.name)}<span class="tag">${esc(a.format)}</span></h3>
+        ${a.desc ? `<p>${esc(a.desc)}</p>` : ''}
+        <div class="meta">${fmtDate(a.date)} · ${fmtSize(a.size)}</div>
+      </div>
+      <a class="btn" href="${esc(a.path)}" download="${esc(a.original)}">دانلود</a>
+    </article>`).join('') : '<div class="empty">هنوز چیزی منتشر نشده است.</div>';
+}
+$('#filters').addEventListener('click', e => { const f = e.target.dataset.f; if(f){ activeFilter = f; render(); } });
+
+/* ---------- رمز عبور (فقط روی همین مرورگر) ---------- */
+const sha = async s => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)))].map(b => b.toString(16).padStart(2,'0')).join('');
+const DEFAULT_HASH = '2a3d9d6c0f4b4d1f5b0f3a2d8f3c1f0e'; // جایگزین در زمان اجرا
+async function pwHash(){ return LS.get('pwHash') || await sha('admin1234'); }
+let loggedIn = false;
+
+$('#openAdmin').onclick = () => { loggedIn ? openAdmin() : ($('#pw').value='', $('#loginMsg').textContent='', $('#loginDlg').showModal(), $('#pw').focus()); };
+$('#loginBtn').onclick = login;
+$('#pw').addEventListener('keydown', e => { if(e.key==='Enter') login(); });
+async function login(){
+  if(await sha($('#pw').value) === await pwHash()){ loggedIn = true; $('#loginDlg').close(); openAdmin(); }
+  else $('#loginMsg').textContent = 'رمز اشتباه است.';
+}
+$('#logout').onclick = () => { loggedIn = false; $('#adminDlg').close(); };
+document.addEventListener('click', e => { const d = e.target.dataset.close; if(d) $('#'+d).close(); });
+
+/* ---------- تنظیمات ---------- */
+function guessRepo(){
+  const h = location.hostname, p = location.pathname.split('/').filter(Boolean);
+  if(h.endsWith('.github.io')) return { user: h.split('.')[0], repo: p[0] || h };
+  return { user:'', repo:'' };
+}
+function openAdmin(){
+  const g = guessRepo();
+  $('#gUser').value = LS.get('gUser', g.user);
+  $('#gRepo').value = LS.get('gRepo', g.repo);
+  $('#gBranch').value = LS.get('gBranch', 'main');
+  $('#gToken').value = LS.get('gToken', '');
+  msg('');
+  $('#adminDlg').showModal();
+  renderAdminList();
+}
+$('#saveGh').onclick = () => {
+  ['gUser','gRepo','gBranch','gToken'].forEach(id => LS.set(id, $('#'+id).value.trim()));
+  msg('تنظیمات ذخیره شد.', 'ok');
+};
+$('#savePw').onclick = async () => {
+  if(await sha($('#pOld').value) !== await pwHash()) return msg('رمز فعلی اشتباه است.', 'err');
+  if($('#pNew').value.length < 6) return msg('رمز جدید باید حداقل ۶ کاراکتر باشد.', 'err');
+  LS.set('pwHash', await sha($('#pNew').value));
+  $('#pOld').value = $('#pNew').value = '';
+  msg('رمز عوض شد.', 'ok');
+};
+document.querySelector('.tabs').addEventListener('click', e => {
+  const t = e.target.dataset.tab; if(!t) return;
+  document.querySelectorAll('.tabs .chip').forEach(c => c.classList.toggle('on', c===e.target));
+  ['up','manage','set'].forEach(x => $('#tab-'+x).classList.toggle('hide', x!==t));
+  if(t==='manage') renderAdminList();
+  msg('');
+});
+function msg(t, c=''){ const m = $('#admMsg'); m.textContent = t; m.className = 'msg ' + c; }
+
+/* ---------- API گیت‌هاب ---------- */
+function cfg(){
+  const c = { user:LS.get('gUser',''), repo:LS.get('gRepo',''), branch:LS.get('gBranch','main'), token:LS.get('gToken','') };
+  if(!c.user || !c.repo || !c.token) throw new Error('اول در تب «تنظیمات»، اطلاعات گیت‌هاب و توکن را وارد کنید.');
+  return c;
+}
+async function gh(path, opts={}){
+  const c = cfg();
+  const url = `https://api.github.com/repos/${c.user}/${c.repo}/contents/${path}`;
+  const r = await fetch(opts.method ? url : `${url}?ref=${c.branch}&t=${Date.now()}`, {
+    ...opts,
+    headers:{ Authorization:'Bearer '+c.token, Accept:'application/vnd.github+json', ...(opts.body?{'Content-Type':'application/json'}:{}) }
+  });
+  if(r.status === 404 && !opts.method) return null;
+  if(!r.ok){ const e = await r.json().catch(()=>({})); throw new Error(`خطای گیت‌هاب (${r.status}): ${e.message||''}`); }
+  return r.json();
+}
+const put = (path, b64, message, sha) => gh(path, { method:'PUT', body: JSON.stringify({ message, content:b64, branch:cfg().branch, ...(sha?{sha}:{}) }) });
+const toB64 = s => btoa(unescape(encodeURIComponent(s)));
+const fromB64 = b => decodeURIComponent(escape(atob(b.replace(/\n/g,''))));
+const fileB64 = f => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.onerror = () => rej(new Error('خواندن فایل ممکن نشد.')); r.readAsDataURL(f); });
+
+async function readIndex(){
+  const f = await gh('apps.json');
+  return f ? { list: JSON.parse(fromB64(f.content)), sha: f.sha } : { list: [], sha: null };
+}
+
+/* ---------- آپلود ---------- */
+$('#uploadBtn').onclick = async () => {
+  const name = $('#fName').value.trim(), file = $('#fFile').files[0];
+  if(!name) return msg('نام را بنویسید.', 'err');
+  if(!file) return msg('یک فایل انتخاب کنید.', 'err');
+  if(file.size > 50*1048576) return msg('حجم فایل بیشتر از ۵۰ مگابایت است.', 'err');
+  const btn = $('#uploadBtn'); btn.disabled = true;
+  try{
+    msg('در حال آپلود فایل…');
+    const ext = (file.name.match(/\.[A-Za-z0-9]+$/)||[''])[0].toLowerCase();
+    const id = Date.now().toString(36);
+    const path = `apps/${id}${ext}`;
+    await put(path, await fileB64(file), `افزودن ${name}`);
+    msg('در حال ثبت در لیست…');
+    const { list, sha } = await readIndex();
+    list.unshift({ id, name, format:$('#fFormat').value, desc:$('#fDesc').value.trim(), path, original:file.name, size:file.size, date:new Date().toISOString() });
+    await put('apps.json', toB64(JSON.stringify(list, null, 2)), 'به‌روزرسانی لیست', sha);
+    apps = list; render(); renderAdminList();
+    $('#fName').value = $('#fDesc').value = $('#fFile').value = '';
+    msg('منتشر شد. ممکن است تا حدود یک دقیقه طول بکشد تا برای همه نمایش داده شود.', 'ok');
+  }catch(e){ msg(e.message, 'err'); }
+  btn.disabled = false;
+};
+
+/* ---------- مدیریت لیست ---------- */
+function renderAdminList(){
+  $('#adminList').innerHTML = apps.length ? apps.map(a => `<div class="adm"><span>${esc(a.name)} <span class="tag">${esc(a.format)}</span></span><button class="btn danger" data-del="${esc(a.id)}">حذف</button></div>`).join('') : '<div class="empty">چیزی برای نمایش نیست.</div>';
+}
+$('#adminList').addEventListener('click', async e => {
+  const id = e.target.dataset.del; if(!id) return;
+  if(!confirm('این مورد حذف شود؟')) return;
+  try{
+    msg('در حال حذف…');
+    const { list, sha } = await readIndex();
+    const item = list.find(a => a.id === id);
+    if(item){
+      const f = await gh(item.path);
+      if(f) await gh(item.path, { method:'DELETE', body: JSON.stringify({ message:`حذف ${item.name}`, sha:f.sha, branch:cfg().branch }) });
+    }
+    const next = list.filter(a => a.id !== id);
+    await put('apps.json', toB64(JSON.stringify(next, null, 2)), 'به‌روزرسانی لیست', sha);
+    apps = next; render(); renderAdminList();
+    msg('حذف شد.', 'ok');
+  }catch(err){ msg(err.message, 'err'); }
+});
+
+loadApps();
+</script>
+</body>
+</html>
